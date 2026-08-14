@@ -12,7 +12,7 @@
 #include "../picomodel/PicoModelLoader.h"
 
 //https://github.com/pfirsich/gltf
-#include "gltf.h"
+#include "gltf/gltf.h"
 #include "../StaticModelSurface.h"
 
 namespace model
