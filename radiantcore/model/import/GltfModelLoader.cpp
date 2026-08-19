@@ -69,6 +69,25 @@ namespace model
                 continue;
             }
 
+            // Handle transformation of the mesh in the node
+            auto transform = Matrix4::getIdentity();
+            for (size_t j = 0; j < gltfFile.nodes.size(); j++)
+            {
+                if (gltfFile.nodes[j].mesh && *gltfFile.nodes[j].mesh == i)
+                {
+                    if (std::holds_alternative<gltf::Node::Trs>(gltfFile.nodes[j].transform))
+                    {
+                        auto trs = std::get<gltf::Node::Trs>(gltfFile.nodes[j].transform);
+                        Matrix4 scale = Matrix4::getScale({trs.scale[0], trs.scale[1], trs.scale[2]});
+                        Matrix4 rotation = Matrix4::getRotation({trs.rotation[0], trs.rotation[1], trs.rotation[2], trs.rotation[3]});
+                        Matrix4 translation = Matrix4::getTranslation({trs.translation[0], trs.translation[1], trs.translation[2]});
+                        transform = scale;
+                        transform.premultiplyBy(rotation);
+                        transform.premultiplyBy(translation);
+                    }
+                }
+            }
+
             for (size_t j = 0; j < gltfFile.meshes[i].primitives.size(); j++)
             {
                 auto& primitive = gltfFile.meshes[i].primitives[j];
@@ -184,9 +203,13 @@ namespace model
                     const std::array<float, 2>* texcoordsVec2 = reinterpret_cast<const std::array<float, 2>*>(texcoords.first);
                     for (size_t vertex = 0; vertex < numVerts; vertex++)
                     {
+                        Vector3 pos = posVec3 ? Vertex3(posVec3[vertex][0], posVec3[vertex][1], posVec3[vertex][2]) : Vertex3();
+                        Vector3 normal = normalsVec3 ? Normal3(-normalsVec3[vertex][0], -normalsVec3[vertex][1], -normalsVec3[vertex][2]) : Normal3();
+
+                        pos = transform.transformPoint(pos);
+                        normal = transform.transformDirection(normal);
                         // NOTE: Normals are negated due to winding order swap from CCW to CW
-                        vertices.emplace_back(posVec3 ? Vertex3(posVec3[vertex][0], posVec3[vertex][1], posVec3[vertex][2]) : Vertex3(),
-                            normalsVec3 ? Normal3(-normalsVec3[vertex][0], -normalsVec3[vertex][1], -normalsVec3[vertex][2]) : Normal3(),
+                        vertices.emplace_back(pos, normal,
                             texcoordsVec2 ? TexCoord2f(texcoordsVec2[vertex][0], texcoordsVec2[vertex][1]) : TexCoord2f());
                     }
 
