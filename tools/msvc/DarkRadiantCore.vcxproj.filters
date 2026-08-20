@@ -215,6 +215,9 @@
     <Filter Include="src\fx">
       <UniqueIdentifier>{8090888b-90cb-49eb-b203-f30f0635ab17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\model\import\gltf">
+      <UniqueIdentifier>{f9cb3f01-2a75-4b83-b0a7-1bcc85cb5df1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\radiantcore\modulesystem\ModuleLoader.cpp">
@@ -1114,11 +1117,11 @@
     <ClCompile Include="..\..\radiantcore\model\import\GltfModelLoader.cpp">
       <Filter>src\model\import</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\radiantcore\model\import\gltf.cpp">
-      <Filter>src\model\import</Filter>
+    <ClCompile Include="..\..\radiantcore\model\import\gltf\gltf.cpp">
+      <Filter>src\model\import\gltf</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\radiantcore\model\import\simdjson.cpp">
-      <Filter>src\model\import</Filter>
+    <ClCompile Include="..\..\radiantcore\model\import\gltf\simdjson.cpp">
+      <Filter>src\model\import\gltf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2274,11 +2277,11 @@
     <ClInclude Include="..\..\radiantcore\model\import\GltfModelLoader.h">
       <Filter>src\model\import</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\radiantcore\model\import\gltf.h">
-      <Filter>src\model\import</Filter>
+    <ClInclude Include="..\..\radiantcore\model\import\gltf\gltf.h">
+      <Filter>src\model\import\gltf</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\radiantcore\model\import\simdjson.h">
-      <Filter>src\model\import</Filter>
+    <ClInclude Include="..\..\radiantcore\model\import\gltf\simdjson.h">
+      <Filter>src\model\import\gltf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
