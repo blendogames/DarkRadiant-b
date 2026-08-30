@@ -60,6 +60,28 @@ namespace model
             return IModelPtr();
         }
 
+        // Maps to help with hierarchy
+        std::unordered_map<size_t, size_t> meshToNodeMap;
+        std::unordered_map<size_t, size_t> nodeToParentMap;
+
+        for (size_t i = 0; i < gltfFile.nodes.size(); i++)
+        {
+            if (gltfFile.nodes[i].mesh)
+            {
+                meshToNodeMap.emplace(*gltfFile.nodes[i].mesh, i);
+            }
+
+            if (nodeToParentMap.find(i) == nodeToParentMap.end())
+            {
+                nodeToParentMap.emplace(i, SIZE_MAX);
+            }
+
+            for (size_t j = 0; j < gltfFile.nodes[i].children.size(); j++)
+            {
+                nodeToParentMap[gltfFile.nodes[i].children[j]] = i;
+            }
+        }
+
         std::vector<StaticModelSurfacePtr> staticSurfaces;
 
         for (size_t i = 0; i < gltfFile.meshes.size(); i++)
@@ -69,22 +91,21 @@ namespace model
                 continue;
             }
 
-            // Handle transformation of the mesh in the node
+            // Handle transformation of the mesh in the node, including parents
             auto transform = Matrix4::getIdentity();
-            for (size_t j = 0; j < gltfFile.nodes.size(); j++)
+            for (size_t node = meshToNodeMap[i]; node != SIZE_MAX; node = nodeToParentMap[node])
             {
-                if (gltfFile.nodes[j].mesh && *gltfFile.nodes[j].mesh == i)
+                if (std::holds_alternative<gltf::Node::Trs>(gltfFile.nodes[node].transform))
                 {
-                    if (std::holds_alternative<gltf::Node::Trs>(gltfFile.nodes[j].transform))
-                    {
-                        auto trs = std::get<gltf::Node::Trs>(gltfFile.nodes[j].transform);
-                        Matrix4 scale = Matrix4::getScale({trs.scale[0], trs.scale[1], trs.scale[2]});
-                        Matrix4 rotation = Matrix4::getRotation({trs.rotation[0], trs.rotation[1], trs.rotation[2], trs.rotation[3]});
-                        Matrix4 translation = Matrix4::getTranslation({trs.translation[0], trs.translation[1], trs.translation[2]});
-                        transform = scale;
-                        transform.premultiplyBy(rotation);
-                        transform.premultiplyBy(translation);
-                    }
+                    auto localTransform = Matrix4::getIdentity();
+                    auto trs = std::get<gltf::Node::Trs>(gltfFile.nodes[node].transform);
+                    Matrix4 scale = Matrix4::getScale({ trs.scale[0], trs.scale[1], trs.scale[2] });
+                    Matrix4 rotation = Matrix4::getRotation({ trs.rotation[0], trs.rotation[1], trs.rotation[2], trs.rotation[3] });
+                    Matrix4 translation = Matrix4::getTranslation({ trs.translation[0], trs.translation[1], trs.translation[2] });
+                    localTransform = scale;
+                    localTransform.premultiplyBy(rotation);
+                    localTransform.premultiplyBy(translation);
+                    transform.multiplyBy(localTransform);
                 }
             }
 
