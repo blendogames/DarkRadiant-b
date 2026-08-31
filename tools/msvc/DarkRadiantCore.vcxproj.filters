@@ -1117,12 +1117,6 @@
     <ClCompile Include="..\..\radiantcore\model\import\GltfModelLoader.cpp">
       <Filter>src\model\import</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\radiantcore\model\import\gltf\gltf.cpp">
-      <Filter>src\model\import\gltf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\radiantcore\model\import\gltf\simdjson.cpp">
-      <Filter>src\model\import\gltf</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\radiantcore\modulesystem\ModuleLoader.h">
@@ -2277,10 +2271,7 @@
     <ClInclude Include="..\..\radiantcore\model\import\GltfModelLoader.h">
       <Filter>src\model\import</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\radiantcore\model\import\gltf\gltf.h">
-      <Filter>src\model\import\gltf</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\radiantcore\model\import\gltf\simdjson.h">
+    <ClInclude Include="..\..\radiantcore\model\import\gltf\cgltf.h">
       <Filter>src\model\import\gltf</Filter>
     </ClInclude>
   </ItemGroup>
