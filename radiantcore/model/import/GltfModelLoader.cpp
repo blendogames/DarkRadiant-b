@@ -106,7 +106,8 @@ namespace model
                 for (size_t k = 0; k < primitive.attributes_count; k++)
                 {
                     cgltf_attribute& attribute = primitive.attributes[k];
-                    if (attribute.type == cgltf_attribute_type_position)
+                    std::string attributeName = attribute.name;
+                    if (attributeName == "POSITION")
                     {
                         cgltf_accessor* accessor = attribute.data;
                         if (accessor->component_type != cgltf_component_type_r_32f)
@@ -124,7 +125,7 @@ namespace model
                         positions = reinterpret_cast<const uint8_t*>(cgltf_buffer_view_data(accessor->buffer_view));
                         
                     }
-                    else if (attribute.type == cgltf_attribute_type_normal)
+                    else if (attributeName == "NORMAL")
                     {
                         cgltf_accessor* accessor = attribute.data;
                         if (accessor->component_type != cgltf_component_type_r_32f)
@@ -140,7 +141,7 @@ namespace model
 
                         normals = reinterpret_cast<const uint8_t*>(cgltf_buffer_view_data(accessor->buffer_view));
                     }
-                    else if (attribute.type == cgltf_attribute_type_texcoord)
+                    else if (attributeName == "TEXCOORD_0")
                     {
                         cgltf_accessor* accessor = attribute.data;
                         if (accessor->component_type != cgltf_component_type_r_32f)
