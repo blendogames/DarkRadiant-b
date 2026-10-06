@@ -26,7 +26,7 @@ class EntityPreview: public RenderPreview
     scene::INodePtr _light;
 
 protected:
-    float _defaultCamDistanceFactor = 2.8f;
+    float _defaultCamDistanceFactor = 1.4f; // BC moved model preview camera closer (was 2.8f)
 
 private:
     bool onPreRender() override;

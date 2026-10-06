@@ -648,6 +648,9 @@ void RenderPreview::resetModelRotation()
 {
     _modelRotation = Matrix4::getIdentity();
 
+    // BC adjust default rotation to accommodate new default forward direction.
+    _modelRotation.rotateByEulerXYZDegrees(Vector3(0, 0, 90));
+
     onModelRotationChanged();
 }
 
