@@ -497,6 +497,11 @@ void CamWnd::handleFreeMovement(float timePassed)
     int angleSpeed = getCameraSettings()->angleSpeed();
     int movementSpeed = getCameraSettings()->movementSpeed();
 
+    if (wxGetKeyState(WXK_SHIFT))
+    {
+        movementSpeed *= 16.0f;
+    }
+
     auto angles = _camera->getCameraAngles();
 
     // Update angles
